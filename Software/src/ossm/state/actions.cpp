@@ -1,5 +1,6 @@
 #include "actions.h"
-
+#include <freertos/FreeRTOS.h>
+#include <freertos/task.h>
 #include "ossm/homing/homing.h"
 #include "ossm/menu/menu.h"
 #include "ossm/pages/error.h"
@@ -184,6 +185,16 @@ void ossmSetNotHomed() {
 
 void ossmResetWiFi() {
     wm.resetSettings();
+}
+
+void ossmStartWifiConnect() {
+    xTaskCreate(
+        [](void* pvParameters) {
+            connectWiFi();
+            vTaskDelete(nullptr);
+        },
+        "wifiConnectTask", 4 * configMINIMAL_STACK_SIZE, nullptr,
+        configMAX_PRIORITIES - 1, nullptr);
 }
 
 void ossmRestart() {

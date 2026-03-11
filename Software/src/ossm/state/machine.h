@@ -6,6 +6,8 @@
 #include "actions.h"
 #include "guards.h"
 #include "../Events.h"
+#include "../../constants/Menu.h"
+#include "../Events.h"
 #include "../../utils/update.h"
 
 namespace sml = boost::sml;
@@ -44,6 +46,7 @@ struct OSSMStateMachine {
             "menu.idle"_s + buttonPress[(isOption(Menu::WiFiSetup))] = "wifi"_s,
             "menu.idle"_s + buttonPress[isOption(Menu::Help)] = "help"_s,
             "menu.idle"_s + buttonPress[(isOption(Menu::Restart))] = "restart"_s,
+            "menu.idle"_s + wifiConnect / startWifiConnect = "menu"_s,
 
             "simplePenetration"_s [isNotHomed] = "homing"_s,
             "simplePenetration"_s [isPreflightSafe] / (resetSettingsSimplePen, drawPlayControls, startSimplePenetration) = "simplePenetration.idle"_s,
@@ -82,6 +85,7 @@ struct OSSMStateMachine {
             "pairing.wifi.idle"_s + done = "pairing"_s,
             "pairing.wifi.idle"_s + buttonPress = "menu"_s,
             "pairing.wifi.idle"_s + longPress = "menu"_s,
+            "pairing.wifi.idle"_s + wifiConnect / startWifiConnect = "pairing.wifi"_s,
 
             "update"_s [isOnline] / drawUpdate = "update.checking"_s,
             "update"_s = "wifi"_s,
@@ -94,6 +98,7 @@ struct OSSMStateMachine {
             "wifi.idle"_s + done / stopWifiPortal = "menu"_s,
             "wifi.idle"_s + buttonPress / stopWifiPortal = "menu"_s,
             "wifi.idle"_s + longPress / resetWiFi = "restart"_s,
+            "wifi.idle"_s + wifiConnect / startWifiConnect = "wifi.idle"_s,
 
             "help"_s / drawHelp = "help.idle"_s,
             "help.idle"_s + buttonPress = "menu"_s,

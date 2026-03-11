@@ -27,6 +27,7 @@ void ossmSetHomed();
 void ossmSetNotHomed();
 void ossmCheckPairing();
 void ossmResetWiFi();
+void ossmStartWifiConnect();
 void ossmRestart();
 
 namespace actions {
@@ -74,6 +75,8 @@ namespace actions {
     constexpr auto stopWifiPortal = []() {};
     
     constexpr auto resetWiFi = []() { ossmResetWiFi(); };
+    
+    constexpr auto startWifiConnect = []() { ossmStartWifiConnect(); };
     
     constexpr auto drawError = []() { ossmDrawError(); };
     

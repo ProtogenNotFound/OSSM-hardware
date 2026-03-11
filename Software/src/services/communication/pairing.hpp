@@ -106,7 +106,7 @@ class PairingCallbacks : public NimBLECharacteristicCallbacks {
 NimBLECharacteristic* initPairingCharacteristic(NimBLEService* pService,
                                                  NimBLEUUID uuid) {
     NimBLECharacteristic* pPairingChar = pService->createCharacteristic(
-        uuid, NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::WRITE);
+        uuid, NIMBLE_PROPERTY::READ_ENC | NIMBLE_PROPERTY::WRITE_ENC);
     pPairingChar->setCallbacks(&pairingCallbacks);
     return pPairingChar;
 }

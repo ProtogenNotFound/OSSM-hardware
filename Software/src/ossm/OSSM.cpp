@@ -11,6 +11,7 @@
 #include "services/communication/queue.h"
 #include "services/encoder.h"
 #include "services/stepper.h"
+#include "services/wm.h"
 
 namespace sml = boost::sml;
 using namespace sml;
@@ -103,7 +104,20 @@ void OSSM::ble_click(String commandString) {
                 static_cast<uint16_t>(command.time),
                 std::chrono::steady_clock::now()});
             break;
-        case Commands::setWifi:
+        case Commands::setWifi: {
+            // Retrieve credentials using parseWiFiCommand
+            WiFiCredentials creds = parseWiFiCommand(commandString);
+            if (creds.ssid != "" && creds.password != "") {
+                if (setWiFiCredentials(creds.ssid, creds.password)) {
+                    if (stateMachine != nullptr) {
+                        stateMachine->process_event(WifiConnect{});
+                    }
+                }
+            } else {
+                ESP_LOGE("OSSM", "Malformed WiFi credentials from BLE");
+            }
+            break;
+        }
         case Commands::ignore:
             break;
     }
